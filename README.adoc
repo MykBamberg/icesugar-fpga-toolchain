@@ -1,0 +1,60 @@
+= iCESugar FPGA Development Toolchain
+Mykolas Bamberg <m.a.bamberg.dev@proton.me>
+:source-highlighter: pygments
+:hide-uri-scheme:
+:hardbreaks-option:
+
+== General Information
+
+This repository provides a toolchain for working with the https://github.com/wuxx/icesugar/blob/master/README_en.md[iCESugar development board] for the https://en.wikipedia.org/wiki/ICE_(FPGA)#iCE40_(40_nm)[Lattice iCE40UP5k FPGA].
+
+A Makefile to automate synthesis, flashing, and running testbenches is provided along with an example project.
+
+== Prerequisites
+
+.The following dependencies must be installed:
+[%collapsible]
+====
+* https://www.yosyshq.com/open-source[Yosys]
+* https://www.yosyshq.com/open-source[Nextpnr]
+* https://www.yosyshq.com/open-source[icepack (icestorm)]
+* https://steveicarus.github.io/iverilog/[Icarus Verilog]
+* https://gtkwave.github.io/gtkwave/[GTKWave]
+* https://bellard.org/tcc/[TinyCC]
+* https://libusb.info/[libusb-1.0]
+* https://libusb.info/hidapi/[hidapi-hidraw]
+====
+
+You can either install them with your system package manager or use the provided Nix Flake.
+Run `make verify-dependencies` to verify their installation.
+
+Before you can flash the development board you will first have to install the required udev rules:
+
+[source,bash]
+----
+$ ./tools/install-udev-rules.sh
+----
+
+== Usage
+
+[source,bash]
+----
+# Synthesis
+$ make
+# Synthesizes and generates the bitstream
+
+# Run Testbenches
+$ make test
+# Runs all testbenches and generates VCD files
+$ gtkwave bin/testbench.vcd
+
+# Flash
+$ make flash
+----
+
+== Configuration
+
+* `VERBOSE`: Set to 1 for detailed output
+* `TARGET`: Bitstream file name
+* `TOP_MODULE`: Top-level module name
+* `TOP_FILE`: Top-level Verilog file
