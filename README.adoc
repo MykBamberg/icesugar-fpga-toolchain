@@ -32,25 +32,35 @@ Before you can flash the development board you will first have to install the re
 
 [source,bash]
 ----
-$ ./tools/install-udev-rules.sh
+./tools/install-udev-rules.sh
 ----
 
 == Usage
 
+[cols="1a,3a"]
+|===
+|[source,bash]
+----
+make
+----
+|Synthesizes and generates the bitstream
+
+|[source,bash]
+----
+make test
+----
+|Runs all testbenches and generates VCD files. View using
 [source,bash]
 ----
-# Synthesis
-$ make
-# Synthesizes and generates the bitstream
-
-# Run Testbenches
-$ make test
-# Runs all testbenches and generates VCD files
-$ gtkwave bin/testbench.vcd
-
-# Flash
-$ make flash
+gtkwave bin/testbench.vcd
 ----
+
+|[source,bash]
+----
+make flash
+----
+|Flash
+|===
 
 == Configuration
 
