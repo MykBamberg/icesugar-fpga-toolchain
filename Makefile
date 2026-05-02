@@ -37,15 +37,15 @@ clean:
 	@rm -rf $(BUILD_DIR) $(OUT_DIR)
 
 verify-dependencies:
-	@which yosys >/dev/null || (echo "Error: yosys not found"; exit 1)
-	@which nextpnr-ice40 >/dev/null || (echo "Error: nextpnr-ice40 not found"; exit 1)
-	@which icepack >/dev/null || (echo "Error: icepack not found"; exit 1)
-	@which iverilog >/dev/null || (echo "Error: iverilog not found"; exit 1)
-	@which tcc >/dev/null || (echo "Error: tcc not found"; exit 1)
-	@pkg-config --exists libusb-1.0 || (echo "Error: libusb-1.0 not found"; exit 1)
-	@pkg-config --exists hidapi-hidraw || (echo "Error: hidapi-hidraw not found"; exit 1)
-	@echo "All required tools are installed"
-
+	@failed=0; \
+	which yosys >/dev/null 2>&1 || { echo "Error: yosys not found"; failed=1; }; \
+	which nextpnr-ice40 >/dev/null 2>&1 || { echo "Error: nextpnr-ice40 not found"; failed=1; }; \
+	which icepack >/dev/null 2>&1 || { echo "Error: icepack not found"; failed=1; }; \
+	which iverilog >/dev/null 2>&1 || { echo "Error: iverilog not found"; failed=1; }; \
+	which tcc >/dev/null 2>&1 || { echo "Error: tcc not found"; failed=1; }; \
+	pkg-config --exists libusb-1.0 || { echo "Error: libusb-1.0 not found"; failed=1; }; \
+	pkg-config --exists hidapi-hidraw || { echo "Error: hidapi-hidraw not found"; failed=1; }; \
+	if [ $$failed -ne 0 ]; then exit 1; else echo "All required tools are installed"; fi
 
 $(OUT_DIR)/%.bin: $(SRC_DIR)/*.v | $(BUILD_DIR) $(OUT_DIR)
 	yosys $(YOSYS_FLAGS) -p "$(YOSYS_SYNTH) -json $(BUILD_DIR)/$*.json" $(TOP_FILE)
